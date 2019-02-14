@@ -3,7 +3,12 @@ class Golyo {
   constructor() {
     this.x = GOLYO_KEZD_X;
     this.y = GOLYO_KEZD_Y;
-    this.xVel = GOLYO_VELOCITY;
+    //this.xVel = GOLYO_VELOCITY;
+    if (random(1) > 0.5) {
+      this.xVel = GOLYO_VELOCITY;
+    } else {
+      this.xVel = -GOLYO_VELOCITY;
+    }
     this.diameter = GOLYO_DIAMETER;
     this.dead = false;
     this.counter = 0;
