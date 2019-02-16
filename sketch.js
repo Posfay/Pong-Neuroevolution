@@ -23,18 +23,25 @@ let isGameRunning = false;
 let leftScore = 0;
 let rightScore = 0;
 let slider, showBtn;
+let allTimeBestShowing = false;
 
 let kezdBalUto, kezdJobbUto;
 let golyo;
 let golyoPause;
 let bestJobb, bestBal;
 let prevBal, prevJobb;
+let leftBrainJSON, rightBrainJSON;
 
 let savedBal = [];
 let savedJobb = [];
 let jobbUtok = [];
 let balUtok = [];
 let golyok = [];
+
+function preload() {
+  leftBrainJSON = loadJSON("leftBrain.json");
+  rightBrainJSON = loadJSON("rightBrain.json");
+}
 
 function setup() {
   createCanvas(800,600);
@@ -47,6 +54,8 @@ function setup() {
   GOLYO_KEZD_X = width / 2;
   GOLYO_KEZD_Y = height / 2;
   golyo = new Golyo();
+  prevBal = new Uto(BAL);
+  prevJobb = new Uto(JOBB);
   for (let i = 0; i < POPULATION_SIZE; i++) {
     balUtok[i] = new Uto(BAL);
     jobbUtok[i] = new Uto(JOBB);
@@ -136,6 +145,12 @@ function draw() {
     text(leftScore, width / 2 - 60, 50);
     text(rightScore, width / 2 + 60, 50);
     stroke(255);
+    strokeWeight(1);
+    fill(255);
+    textSize(13);
+    if (allTimeBestShowing) {
+      text("All time best is playing", width - 70, 27);
+    }
   }
 }
 
@@ -144,9 +159,16 @@ function keyPressed() {
     isGameRunning = !isGameRunning;
     rightScore = 0;
     leftScore = 0;
-  } else if (key === 'S') {
+  } else if (key === 'B') {
     saveJSON(prevBal.brain, 'leftBrain.json');
+  } else if (key === 'J') {
     saveJSON(prevJobb.brain, 'rightBrain.json');
+  } else if (key === 'L') {
+    let balBrain = NeuralNetwork.deserialize(leftBrainJSON);
+    let jobbBrain = NeuralNetwork.deserialize(rightBrainJSON);
+    prevBal = new Uto(BAL, balBrain);
+    prevJobb = new Uto(JOBB, jobbBrain);
+    allTimeBestShowing = true;
   }
 }
 
@@ -176,6 +198,7 @@ function btnPressed() {
     showBtn.html("Continue Training");
   } else {
     showBtn.html("Show Best");
+    allTimeBestShowing = false;
   }
 }
 
