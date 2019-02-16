@@ -164,11 +164,13 @@ function keyPressed() {
   } else if (key === 'J') {
     saveJSON(prevJobb.brain, 'rightBrain.json');
   } else if (key === 'L') {
-    let balBrain = NeuralNetwork.deserialize(leftBrainJSON);
-    let jobbBrain = NeuralNetwork.deserialize(rightBrainJSON);
-    prevBal = new Uto(BAL, balBrain);
-    prevJobb = new Uto(JOBB, jobbBrain);
-    allTimeBestShowing = true;
+    if (!allTimeBestShowing) {
+      let balBrain = NeuralNetwork.deserialize(leftBrainJSON);
+      let jobbBrain = NeuralNetwork.deserialize(rightBrainJSON);
+      prevBal = new Uto(BAL, balBrain);
+      prevJobb = new Uto(JOBB, jobbBrain);
+      allTimeBestShowing = true;
+    }
   }
 }
 
