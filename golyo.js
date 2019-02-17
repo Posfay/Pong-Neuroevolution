@@ -3,7 +3,7 @@ class Golyo {
   constructor() {
     this.x = GOLYO_KEZD_X;
     this.y = GOLYO_KEZD_Y;
-    //this.xVel = GOLYO_VELOCITY;
+    // this.xVel = GOLYO_VELOCITY;
     if (random(1) > 0.5) {
       this.xVel = GOLYO_VELOCITY;
     } else {
@@ -31,9 +31,17 @@ class Golyo {
     this.left = this.x - (this.diameter / 2);
     this.right = this.x + (this.diameter / 2);
 
-    if ((this.top < 0) || (this.bottom > height)) {
+    //hits top
+    if (this.top < 0) {
       this.yVel = -1 * this.yVel;
+      this.y = 0 + this.diameter + 1;
     }
+    //hits bottom
+    if (this.bottom > height) {
+      this.yVel = -1 * this.yVel;
+      this.y = height - this.diameter - 1;
+    }
+    //hits the left paddle
     if (((this.bottom > balUto.y) && (this.top < balUto.bottom)) && (this.left < balUto.right)) {
       this.xVel = (-1 * this.xVel);
       this.yVel += random(-GOLYO_VELOCITY/HANYAD_RESZE_YVEL_VALTOZIK, GOLYO_VELOCITY/HANYAD_RESZE_YVEL_VALTOZIK);
@@ -41,6 +49,7 @@ class Golyo {
 
       balUto.hits++;
     }
+    //hits the right paddle
     if (((this.bottom > jobbUto.y) && (this.top < jobbUto.bottom)) && (this.right > jobbUto.x)) {
       this.xVel = (-1 * this.xVel);
       this.yVel += random(-GOLYO_VELOCITY/HANYAD_RESZE_YVEL_VALTOZIK, GOLYO_VELOCITY/HANYAD_RESZE_YVEL_VALTOZIK);

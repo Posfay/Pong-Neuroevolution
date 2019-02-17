@@ -24,6 +24,7 @@ let leftScore = 0;
 let rightScore = 0;
 let slider, showBtn;
 let allTimeBestShowing = false;
+let bestVersusCurrent = false;
 
 let kezdBalUto, kezdJobbUto;
 let golyo;
@@ -131,15 +132,15 @@ function draw() {
       golyo.update(prevBal, prevJobb);
     }
     background(0);
-    strokeWeight(6);
+    strokeWeight(5);
     fill(255);
     line(width/2, 0, width/2, height);
     strokeWeight(1);
     prevBal.show();
     prevJobb.show();
     golyo.show();
-    fill(255,0,0);
-    stroke(255,0,0);
+    fill(255, 0, 0);
+    stroke(255, 0, 0);
     textAlign(CENTER);
     textSize(32);
     text(leftScore, width / 2 - 60, 50);
@@ -150,6 +151,14 @@ function draw() {
     textSize(13);
     if (allTimeBestShowing) {
       text("All time best is playing", width - 70, 27);
+    } else if (bestVersusCurrent) {
+      stroke(255);
+      strokeWeight(1);
+      fill(255);
+      textSize(13);
+
+      text("Current trained", 60, 27);
+      text("All time best", width - 50, 27);
     }
   }
 }
@@ -169,7 +178,19 @@ function keyPressed() {
       let jobbBrain = NeuralNetwork.deserialize(rightBrainJSON);
       prevBal = new Uto(BAL, balBrain);
       prevJobb = new Uto(JOBB, jobbBrain);
+      leftScore = 0;
+      rightScore = 0;
+      golyo = new Golyo();
       allTimeBestShowing = true;
+    }
+  } else if (key === 'V') {
+    if (!allTimeBestShowing && !bestVersusCurrent) {
+      let jobbBrain = NeuralNetwork.deserialize(rightBrainJSON);
+      prevJobb = new Uto(JOBB, jobbBrain);
+      leftScore = 0;
+      rightScore = 0;
+      golyo = new Golyo();
+      bestVersusCurrent = true;
     }
   }
 }
@@ -201,6 +222,7 @@ function btnPressed() {
   } else {
     showBtn.html("Show Best");
     allTimeBestShowing = false;
+    bestVersusCurrent = false;
   }
 }
 
